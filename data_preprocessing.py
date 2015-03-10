@@ -7,10 +7,10 @@ data = {}
 with open(r'E:\Thesis\ACL\Data\dir_vs_ndir.csv', mode='r') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-	  data[row['Sentence']] = row['Label']
+	  data[row['ID']] = (row['Sentence'],row['Label'])
     
 print "You have", len(data), "data items"	  
-data_list = data.items()
+data_list = data.values()
 shuffle(data_list)
 print data_list[0:5]
 def data_into_array(text):
@@ -22,7 +22,7 @@ def data_into_array(text):
 data, labels = data_into_array(data_list)
 
 print "Your data is ready to use!"  
-print "............................"
+print ".........................................................................."
 print "Starting the classifier"
 
 #################################################################################################
@@ -42,6 +42,6 @@ text_clf = Pipeline([('vect', CountVectorizer()),
                     ('clf', svm.SVC(kernel='linear', C=1))])
                     #SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, n_iter=5))])
                   
-scores = cross_validation.cross_val_score(text_clf, data, labels, cv=5, scoring='f1')
+scores = cross_validation.cross_val_score(text_clf, data, labels, cv=5)
 
 print scores
